@@ -3,61 +3,24 @@
 	width: 600px;
 }
 
-.hidden {
-	display: none;
-}
-
-.left {
-	float: left;
-}
-
-.stack-image {
-	background: url('images/stack-icon.png') no-repeat center center;
-	width: 200px;
-	height: 200px;
-	-webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-  margin-right: 1em;
-  border-radius: 5px;
-}
-
-.intro {
-	margin-bottom: 1em;
-}
-.stack {
-	clear: both;
-}
-
-.inspiration { 
-	margin-left: 3em;
-}
-
-.result {
-	border: 1px solid black;
-	padding: 5px;
-	margin: 0 auto 1em auto;
-}
-
 .error {
 	background-color: #F78181;
 	padding: 1em;
 }
 
-.avatar {
-	float: left;
-	padding: 10px;
+.hidden {
+	display: none;
 }
 
-.inspiration dt {
-	font-weight: bold;
-}
-
-.inspiration dd {
-	margin-bottom: 5px;
-}
-
-.bookResult {
+.recResult {
 	list-style: none;
+}
+
+.recType {
+	font-style: italic;
+	font-size: 0.9em;
+}
+
+.alikeButton:hover {
+	cursor: pointer;
 }
