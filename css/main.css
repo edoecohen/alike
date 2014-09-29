@@ -57,3 +57,7 @@
 .inspiration dd {
 	margin-bottom: 5px;
 }
+
+.bookResult {
+	list-style: none;
+}
