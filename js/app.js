@@ -7,7 +7,7 @@ $(document).ready( function() {
 		$('.results').empty();
 		// get the value of the tags the user submitted
 		var query = $(this).find("input[name='query']").val();
-		//getRecommendations(query);
+		getRecommendations(query);
 		getAmazonItemInfo(query);
 	});
 
@@ -125,8 +125,7 @@ $(document).ready( function() {
 	}
 
 	var getAmazonItemInfo = function (query) {
-	    var PrivateKey = "aXD0JYuOcUBWjPwuzCFO5Y39t3+0/KXKykrJJmcw";
-	    var PublicKey = "AKIAIKQHA7GGOCNPIX7Q";
+	    
 	    var AssociateTag = "alike-20";
 	    var queryNew = encodeURIComponent(query);
 
