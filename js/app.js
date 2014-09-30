@@ -98,70 +98,7 @@ $(document).ready( function() {
 		return result;
 	};
 
-	// GET ITEMS FROM AMAZON
-	function sha256(stringToSign, secretKey) {
-  		var hex = CryptoJS.HmacSHA256(stringToSign, secretKey);
-  		return hex.toString(CryptoJS.enc.Base64);
-	} 
-
-	function timestamp() {
-	    var date = new Date();
-	    var y = date.getUTCFullYear().toString();
-	    var m = (date.getUTCMonth() + 1).toString();
-	    var d = date.getUTCDate().toString();
-	    var h = date.getUTCHours().toString();
-	    var min = date.getUTCMinutes().toString();
-	    var s = date.getUTCSeconds().toString();
-
-	    if(m.length < 2) { m = "0" + m; }
-	    if(d.length < 2) { d = "0" + d; }
-	    if(h.length < 2) { h = "0" + h; }
-	    if(min.length < 2) { min = "0" + min; }
-	    if(s.length < 2) { s = "0" + s}
-
-	    var date = y + "-" + m + "-" + d;
-	    var time = h + ":" + min + ":" + s;
-	    return date + "T" + time + "Z";
-	}
-
-	var getAmazonItemInfo = function (query) {
-	    var PrivateKey = "aXD0JYuOcUBWjPwuzCFO5Y39t3+0/KXKykrJJmcw";
-	    var PublicKey = "AKIAIKQHA7GGOCNPIX7Q";
-	    var AssociateTag = "alike-20";
-	    var queryNew = encodeURIComponent(query);
-
-	    var parameters = [];
-	    parameters.push("AWSAccessKeyId=" + PublicKey);
-	    parameters.push("Keywords=" + queryNew);
-	    parameters.push("Operation=ItemSearch");
-	    parameters.push("SearchIndex=All");
-	    parameters.push("ResponseGroup=Small");
-	    parameters.push("Service=AWSECommerceService");
-	    parameters.push("Timestamp=" + encodeURIComponent(timestamp()));
-	    parameters.push("Version=2011-08-01");
-		parameters.push("AssociateTag=" + AssociateTag);
-
-	    parameters.sort();
-	    var paramString = parameters.join('&');
-
-	    var signingKey = "GET\n" + "webservices.amazon.com\n" + "/onca/xml\n" + paramString
-
-	    var signature = sha256(signingKey,PrivateKey);
-	        signature = encodeURIComponent(signature);
-
-	    var amazonUrl =  "http://webservices.amazon.com/onca/xml?" + paramString + "&Signature=" + signature;
-	    console.log(amazonUrl);
-		
-		var amazonItem = $.ajax({
-			url: amazonUrl,
-			dataType: "jsonp",
-			type: "GET",
-			headers: { "Signature": signature}
-		})
-		.done(function(){
-			console.log("done processing ajax")			
-		});
-	};
+	
 	
 	//getAmazonItemInfo("catcher in the rye");
 	//var catcher = getAmazonItemInfo("catcher in the rye");
