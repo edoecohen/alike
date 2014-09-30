@@ -125,7 +125,8 @@ $(document).ready( function() {
 	}
 
 	var getAmazonItemInfo = function (query) {
-	    
+	    var PrivateKey = "aXD0JYuOcUBWjPwuzCFO5Y39t3+0/KXKykrJJmcw";
+	    var PublicKey = "AKIAIKQHA7GGOCNPIX7Q";
 	    var AssociateTag = "alike-20";
 	    var queryNew = encodeURIComponent(query);
 
@@ -161,10 +162,6 @@ $(document).ready( function() {
 			console.log("done processing ajax")			
 		});
 	};
-
-
-
-
 	
 	//getAmazonItemInfo("catcher in the rye");
 	//var catcher = getAmazonItemInfo("catcher in the rye");
@@ -172,9 +169,5 @@ $(document).ready( function() {
 
 
 });
-//http://webservices.amazon.com/onca/xml?AWSAccessKeyId=AKIAIKQHA7GGOCNPIX7Q&AssociateTag=alike-20&Keywords=u2&Operation=ItemSearch&ResponseGroup=Small&SearchIndex=All&Service=AWSECommerceService&Timestamp=2014-09-29T23%3A27%3A27Z&Version=2011-08-01&Signature=Amv81rCeRmq48CHe7nzWp375NFIuCaYjIHENB%2BVxOCc%3D
-//http://webservices.amazon.com/onca/xml?AWSAccessKeyId=AKIAIKQHA7GGOCNPIX7Q&AssociateTag=alike-20&Keywords=u2&Operation=ItemSearch&ResponseGroup=Small&SearchIndex=All&Service=AWSECommerceService&Timestamp=2014-09-29T23%3A27%3A27Z&Version=2011-08-01&Signature=Amv81rCeRmq48CHe7nzWp375NFIuCaYjIHENB%2BVxOCc%3D&callback=jQuery1111008726128935813904_1412033246304&_=1412033246305
-
-
 
 
