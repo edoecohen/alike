@@ -21,6 +21,10 @@
 	font-size: 0.9em;
 }
 
+.recImage img {
+	width: 200px;
+}
+
 .alikeButton:hover {
 	cursor: pointer;
 }
