@@ -156,6 +156,7 @@ $(document).ready( function() {
 		// SET THE DESCRIPTION OF THE BOOK
 		var bookDescription = result.find('.recDescription');
 		bookDescription.text(recommendation.wTeaser);
+		console.log(recommendation.wTeaser.length);
 
 		// When user clicks 'Alike' take the recTitle and pass into query
 		var alikeButton = result.find('.alikeButton');
@@ -194,23 +195,47 @@ $(document).ready( function() {
 	//  container.masonry();
 	//});
 
-	$('.recImg').bind('click', function() {
+	$('html').click(function() {
+		$('.gigante').find('.recDescription').fadeOut();
+		$('.gigante').removeClass('gigante');
+		container.masonry();
+	});
+
+	$('.recImg').bind('click', function(event) {
 		if($(this).parent().hasClass('gigante')) {
-			$(this).parent().removeClass('gigante');
-			$(this).find('.recDescription').fadeOut();
-			container.masonry();
+			//$(this).parent().removeClass('gigante');
+			//$(this).find('.recDescription').fadeOut();
+			//container.masonry();
+			return;
 		}
 		else {
+			event.stopPropagation();
 			$('.gigante').find('.recDescription').fadeOut();
 			$('.gigante').removeClass('gigante');
 			$(this).parent().addClass('gigante');
 			$(this).find('.recDescription').fadeIn();
 			container.masonry();
-		}
-		//$('.img').not(this).parent().removeClass('gigante');
-		//$(this).parent().toggleClass('gigante');
-		
+		};
 	});
+
+	$('.video').on('click', function(event) {
+		event.stopPropagation();
+  		$('.recVideo').modal({
+  			fadeDuration: 250,
+  			showClose: true
+  		});
+  		return false;
+	});
+
+	$('.recVideo').on('modal:open', function () { 
+		$(this).html('<iframe width="480" height="360" src="http://www.youtube.com/embed/JRkK5n2mkvg?rel=0" frameborder="0" allowfullscreen></iframe>');  
+		console.log("Video is placed!")
+	});
+	$('.recVideo').on('modal:close', function () {
+		$(this).html('');
+		console.log("Video is removed!")
+	});
+
 
 });
 

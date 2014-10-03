@@ -142,7 +142,7 @@ html, body {
 	color: #686868;
 	cursor: pointer;
 	float: left;
-	font-size: 0.8em;
+	font-size: 0.9em;
 	margin-top: 5px;
 }
 
@@ -180,6 +180,29 @@ html, body {
 	overflow: hidden;
 }
 
+.links {
+	list-style: none;
+	text-align: right;
+	margin-top: 20px;
+	border-top: 1px solid #FFF;
+	padding-top: 20px;
+	font-family: 'Montserrat', sans-serif;
+	font-size: 0.9em;
+}
+
+.links li {
+	display: inline;
+	margin-right: 20px;
+	cursor: pointer;
+}
+
+.links li:hover {
+	color: red;
+}
+
+.recVideo {
+	display: none;
+}
 
 /* RESPONSIVE */
 
@@ -199,6 +222,9 @@ html, body {
 
 .item.gigante {
   width: 400px;
+}
+.item.gigante:hover {
+	cursor: default;
 }
 .item:hover {
 	cursor: pointer;
