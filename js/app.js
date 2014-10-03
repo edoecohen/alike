@@ -1,7 +1,5 @@
 $(document).ready( function() {
 
-var allRecs = [];	
-
 	// USER SUBMITS A QUERY
 	$('.recommendation-getter').submit( function(event){
 		// zero out results if previous search has run
@@ -17,10 +15,9 @@ var allRecs = [];
 	var movies = "//movies";
 	var shows = "//shows";
 
-	// GET BOOK RECOMMENDATIONS
+	// GET RECOMMENDATIONS
 	var getRecommendations = function(query) {
 		$('.results').empty();
-		allRecs.length = 0
 
 		// the parameters we need to pass in our request to TasteKid's API
 		var request = {
@@ -39,7 +36,15 @@ var allRecs = [];
 			type: "GET"
 		})	
 		.success(musicRecs = function (myData) {
-			allRecs.push(myData.Similar.Results);
+		// SHOW THE QUERY RESULTS FIRST
+			$.each(myData.Similar.Info, function(i, item) {
+				var showResult = showRec(item);
+				$('.results').prepend(showResult);
+			});
+			$.each(myData.Similar.Results, function(i, item) {
+				var resultItem = showRec(item);
+				$('.results').append(resultItem);
+			});
 		});
 
 		// GET BOOK RECOMMENDATIONS
@@ -51,7 +56,10 @@ var allRecs = [];
 			type: "GET"
 		})	
 		.success(bookRecs = function (myData) {
-			allRecs.push(myData.Similar.Results);
+			$.each(myData.Similar.Results, function(i, item) {
+				var resultItem = showRec(item);
+				$('.results').append(resultItem);
+			});
 		});
 
 		// GET MOVIE RECOMMENDATIONS
@@ -63,7 +71,10 @@ var allRecs = [];
 			type: "GET"
 		})	
 		.success(movieRecs = function (myData) {
-			allRecs.push(myData.Similar.Results);
+			$.each(myData.Similar.Results, function(i, item) {
+				var resultItem = showRec(item);
+				$('.results').append(resultItem);
+			});
 		});
 
 		// GET TV RECOMMENDATIONS
@@ -75,26 +86,11 @@ var allRecs = [];
 			type: "GET"
 		})	
 		.success(showRecs = function (myData) {
-
-			// SHOW THE QUERY RESULTS FIRST
-			$.each(myData.Similar.Info, function(i, item) {
-				var showResult = showRec(item);
-				$('.results').prepend(showResult);
+			$.each(myData.Similar.Results, function(i, item) {
+				var resultItem = showRec(item);
+				$('.results').append(resultItem);
 			});
-
-			allRecs.push(myData.Similar.Results);
-			console.log(allRecs);
-			
-			//SHOW ALL RECOMMENDATIONS IN THE RESULTS
-			for (index = 0; index < allRecs.length; ++index) {
-			    $.each(allRecs[index], function(i, item) {
-					var resultItem = showRec(item);
-					$('.results').append(resultItem);
-				});
-			};	
 		});
-
-		console.log(allRecs);
 	};
 
 // SHOW RECOMMENDATIONS FUNCTION
@@ -172,8 +168,56 @@ var allRecs = [];
 	};
 
 
-           
+// MASONRY
+	var container = $('#masonry-con');
+	
+	// initialize
+	container.imagesLoaded( function() {
+		container.masonry({
+		  columnWidth: 60,
+		  itemSelector: '.item',
+		  gutter: 15
+		  //isFitWidth: true
+		});
+	});
+
+	var msnry = container.data('masonry');
+
+	//eventie.bind( container, 'click', function( event ) {
+	  // don't proceed if item was not clicked on
+	  //if ( !classie.has( event.target, 'item' ) ) {
+	  //  return;
+	  //};
+	  // change size of item via class
+	//  classie.toggle( event.target, 'gigante' );
+	  // trigger layout
+	//  container.masonry();
+	//});
+
+	$('.recImg').bind('click', function() {
+		if($(this).parent().hasClass('gigante')) {
+			$(this).parent().removeClass('gigante');
+			$(this).find('.recDescription').fadeOut();
+			container.masonry();
+		}
+		else {
+			$('.gigante').find('.recDescription').fadeOut();
+			$('.gigante').removeClass('gigante');
+			$(this).parent().addClass('gigante');
+			$(this).find('.recDescription').fadeIn();
+			container.masonry();
+		}
+		//$('.img').not(this).parent().removeClass('gigante');
+		//$(this).parent().toggleClass('gigante');
+		
+	});
 
 });
+
+
+
+
+
+
 
 

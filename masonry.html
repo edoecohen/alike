@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Masonry - Test</title>
+	<link rel="stylesheet" href="css/main.css" />
+	<link href='http://fonts.googleapis.com/css?family=Permanent+Marker|Montserrat:400,700' rel='stylesheet' type='text/css'>
+	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<script src="js/app.js"></script>
+	<script src="js/masonry.pkgd.min.js"></script>
+	<script src="js/imagesloaded.pkgd.min.js"></script>
+</head>
+
+<body>
+	<div class="whole-page">
+		<div id="leftCol">
+			<div class="logo">
+				Alike
+			</div>
+			<form class="recommendation-getter" onsubmit="return false;">
+				<div class="inputField">
+					<input type="text" name="query" size="30" autofocus required>
+					<div class="placeholder">
+						What <span class="category">music</span> do you like?
+					</div>
+				</div>
+				<input type="submit" value="Submit">
+			</form>
+			<nav class="filters">
+				<ul>
+					<li class="selected">All <span class="recCount">19 Alikes</span></li>
+					<li class="filterMusic">Music</li>
+					<li class="filterBooks">Books</li>
+					<li class="filterMovies">Movies</li>
+					<li class="filterShows">TV Shows</li>
+				</ul>
+			</nav>
+		</div>
+		<div id="masonry-con">
+			<div class="item queryItem">
+				<img src="images/Salinger.jpg" />
+				<div class="recTitle">
+					J.D. Salinger
+				</div>
+				<div class="recDescription">
+					Jerome David "J. D." Salinger (/ˈsælɪndʒər/; January 1, 1919 – January 27, 2010) was an American writer who won acclaim early in life. He led a very private life for more than a half-century. He published his final original work in 1965 and gave his last interview in 1980.Salinger was raised in Manhattan and began writing short stories while in secondary school. Several were published in Story magazine in the early 1940s before he began serving in World War II. In 1948, his critically acclaimed story "A Perfect Day for Bananafish" appeared in The New Yorker magazine, which became home to much of his later work. In 1951, his novel The Catcher in the Rye was an immediate popular success. His depiction of adolescent alienation and loss of innocence in the protagonist Holden Caulfield was influential, especially among adolescent readers.
+				</div>
+				
+			</div>
+			<div class="item"><img src="images/Girl.jpg" /></div>
+			<div class="item"><img src="images/Fitz.jpg" /></div>
+			<div class="item"><img src="images/Squid.jpg" /></div>
+			<div class="item"><img src="images/Flew.jpg" /></div>
+			<div class="item"><img src="images/Harper.jpg" /></div>
+			<div class="item"><img src="images/My.jpg" /></div>
+			<div class="item"><img src="images/Beat.jpg" /></div>
+		</div>
+	</div>
+</body>
