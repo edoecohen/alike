@@ -123,10 +123,21 @@ html, body {
 
 /* MASONRY */
 
+.queryItem {
+	border: 2px solid #3A3A3A;
+	background: #F1F1F1;
+}
+
+.queryItem .recTitle{
+	padding: 0px 10px 5px;
+}
+
 #masonry-con {
 	max-width: 1207px;
 	left: 345px;
 	width: 75%;
+	margin-top: 18px;
+	display: none;
 }
 
 .item { 
@@ -160,8 +171,9 @@ html, body {
 }
 
 .recImg {
-	position:relative;
-	overflow:hidden;
+	position: relative;
+	overflow: hidden;
+	width: 100%;
 }
 
 .recImg img {
@@ -203,6 +215,9 @@ html, body {
 .recVideo {
 	display: none;
 }
+.recVideoHolder {
+	display: none;
+}
 
 /* RESPONSIVE */
 
@@ -218,10 +233,13 @@ html, body {
 	.item {
 		min-width: 70%;
 	}
+	.item.gigante{
+		width: 355px;
+	}
 }
 
 .item.gigante {
-  width: 400px;
+  width: 570px;
 }
 .item.gigante:hover {
 	cursor: default;

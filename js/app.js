@@ -1,5 +1,7 @@
 $(document).ready( function() {
 
+	var container = $('#masonry-con');
+
 	// USER SUBMITS A QUERY
 	$('.recommendation-getter').submit( function(event){
 		// zero out results if previous search has run
@@ -17,7 +19,7 @@ $(document).ready( function() {
 
 	// GET RECOMMENDATIONS
 	var getRecommendations = function(query) {
-		$('.results').empty();
+		container.removeData().empty();
 
 		// the parameters we need to pass in our request to TasteKid's API
 		var request = {
@@ -43,10 +45,11 @@ $(document).ready( function() {
 			});
 			$.each(myData.Similar.Results, function(i, item) {
 				var resultItem = showRec(item);
-				$('.results').append(resultItem);
+				$('.results').append(resultItem);	
 			});
+			modals();
 		});
-
+			
 		// GET BOOK RECOMMENDATIONS
 		$.ajax({
 			url: "http://www.tastekid.com/ask/ws?q="+query+books+"&jsonp=bookRecs",
@@ -100,6 +103,8 @@ $(document).ready( function() {
 		var result = $('.templates .recResult').clone();
 
 		// PLACE THE IMAGE
+		var recImg = result.find('.recImg');
+
 		var placeImage = function () {
 			
 			var imageURL;
@@ -119,9 +124,17 @@ $(document).ready( function() {
 				})
 				.success( bingResult = function (myData){
 					imageURL = myData.d.results[0].MediaUrl;
-					var recImage = result.find('.recImage img');
-					recImage.attr('src', imageURL);
-					console.log(imageURL);
+					var recImg = result.find('.recImg img');
+					recImg.attr('src', imageURL);
+				
+					//Initiate your masonry
+					container.imagesLoaded(function(){ 
+					    container.masonry({
+					        columnWidth: 60,
+					  		itemSelector: '.item',
+					  		gutter: 15
+					    }); 
+					});
 				});
 			};
 			
@@ -131,7 +144,7 @@ $(document).ready( function() {
 				// var bingApiImageCount = "1";                
 				 
 				var s = bingApiUrl +
-				"?Query=%27" + query + "%27" +
+				"?Query=%27" + query + "%20" + recommendation.Type + "%27" +
 				//"&image.count=" + bingApiImageCount +
 				//"&Image.Offset=" + 0 +
 				"&$format=json";
@@ -145,95 +158,98 @@ $(document).ready( function() {
 		placeImage();
 
 		// SET THE TITLE FOR THE BOOK
-		var bookTitle = result.find('.recTitle a');
-		bookTitle.text(recommendation.Name);
-		bookTitle.attr('href', recommendation.wUrl);
+		var recTitle = result.find('.recTitle');
+		recTitle.text(recommendation.Name);
+		//recTitle.attr('href', recommendation.wUrl);
 
-		// SET THE TITLE OF THE BOOK
+		// SET THE TYPE OF THE BOOK
 		var recType = result.find('.recType');
-		recType.text(recommendation.Type);
+		recType.addClass(recommendation.Type);
 
 		// SET THE DESCRIPTION OF THE BOOK
-		var bookDescription = result.find('.recDescription');
-		bookDescription.text(recommendation.wTeaser);
-		console.log(recommendation.wTeaser.length);
+		var recDescriptionText = result.find('.text');
+		recDescriptionText.text(recommendation.wTeaser);
 
-		// When user clicks 'Alike' take the recTitle and pass into query
-		var alikeButton = result.find('.alikeButton');
-		alikeButton.on('click', function() {
-			var query = recommendation.Name;
+		var videoURL = recommendation.yUrl;
+		var recVideoHolder = result.find('.recVideoHolder');
+		recVideoHolder.html('<iframe width="480" height="360" src="' + videoURL + '?rel=0" frameborder="0" allowfullscreen></iframe>');
+
+		var videoType = result.find('.video');
+		var setVideoType = function () {
+			if (recommendation.Type == 'movie' || 'show') {
+				videoType.text("Trailer");
+			}
+			else if (recommendation.Type == 'music') {
+				videoType.text("Music Video");
+			}
+			else {
+				videoType.text("");
+			}
+		};
+		setVideoType();
+
+		return result;		
+	};
+
+// ITEM OPENS TO SHOW DESCRIPTION
+	var modals = function() {
+		$('.recImg').bind('click', function(event) {
+			if($(this).parent().hasClass('gigante')) {
+				return;
+			}
+			else {
+				event.stopPropagation();
+				$('.gigante').find('.recDescription').fadeOut();
+				$('.gigante').removeClass('gigante');
+				$(this).parent().addClass('gigante');
+				$(this).find('.recDescription').fadeIn();
+				container.masonry();
+				console.log("Image was clicked correctly");
+			};
+		});
+
+		$('.video').on('click', function(event) {
+			event.stopPropagation();
+	  		$(this).parent().parent().parent().parent().find('.recVideo').modal({
+	  			fadeDuration: 250,
+	  			showClose: true
+	  		});
+	  		return false;
+		});
+
+		$('.recVideo').on('modal:open', function () { 
+			var videoHTML =  $(this).parent().find('.recVideoHolder').html();
+			$(this).html(videoHTML);
+			console.log("Video modal is open!")
+		});
+
+		$('.recVideo').on('modal:close', function () {
+			$(this).html('');
+			console.log("Video is removed!");
+		});
+
+		$('html').click(function() {
+			$('.gigante').find('.recDescription').fadeOut();
+			$('.gigante').removeClass('gigante');
+			container.masonry();
+		});
+	};
+
+	/*$( document ).ajaxStop(function() {
+		$('.recTitle').on('click', function() {
+			var query = 
+			getRecommendations(query);
+		});
+	});*/
+
+	$(document).ajaxComplete(function() {
+		$('.recTitle').on('click', function() {
+			var query = $(this).text();
+			console.log(query);
 			getRecommendations(query);
 		});
 
-		return result;
-	};
-
-
-// MASONRY
-	var container = $('#masonry-con');
-	
-	// initialize
-	container.imagesLoaded( function() {
-		container.masonry({
-		  columnWidth: 60,
-		  itemSelector: '.item',
-		  gutter: 15
-		  //isFitWidth: true
-		});
-	});
-
-	var msnry = container.data('masonry');
-
-	//eventie.bind( container, 'click', function( event ) {
-	  // don't proceed if item was not clicked on
-	  //if ( !classie.has( event.target, 'item' ) ) {
-	  //  return;
-	  //};
-	  // change size of item via class
-	//  classie.toggle( event.target, 'gigante' );
-	  // trigger layout
-	//  container.masonry();
-	//});
-
-	$('html').click(function() {
-		$('.gigante').find('.recDescription').fadeOut();
-		$('.gigante').removeClass('gigante');
-		container.masonry();
-	});
-
-	$('.recImg').bind('click', function(event) {
-		if($(this).parent().hasClass('gigante')) {
-			//$(this).parent().removeClass('gigante');
-			//$(this).find('.recDescription').fadeOut();
-			//container.masonry();
-			return;
-		}
-		else {
-			event.stopPropagation();
-			$('.gigante').find('.recDescription').fadeOut();
-			$('.gigante').removeClass('gigante');
-			$(this).parent().addClass('gigante');
-			$(this).find('.recDescription').fadeIn();
-			container.masonry();
-		};
-	});
-
-	$('.video').on('click', function(event) {
-		event.stopPropagation();
-  		$('.recVideo').modal({
-  			fadeDuration: 250,
-  			showClose: true
-  		});
-  		return false;
-	});
-
-	$('.recVideo').on('modal:open', function () { 
-		$(this).html('<iframe width="480" height="360" src="http://www.youtube.com/embed/JRkK5n2mkvg?rel=0" frameborder="0" allowfullscreen></iframe>');  
-		console.log("Video is placed!")
-	});
-	$('.recVideo').on('modal:close', function () {
-		$(this).html('');
-		console.log("Video is removed!")
+		$('#masonry-con').show();
 	});
 
 
