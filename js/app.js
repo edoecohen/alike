@@ -1,100 +1,188 @@
 $(document).ready( function() {
 
-	var container = $('#masonry-con');
+	// COLLECT QUERY FROM USER
+
+	// RUN A TASTEKID SEARCH ON QUERY
+	// FOR EACH ITEM RESULT CLONE TEMPLATE AND ENTER INTO CONTAINER
+	// GET IMAGES TO ADD FOR ITEMS
+	// RUN MASONRY ON CONTAINER
+	// ADD YOUTUBE LINKS
+
+	// IF USER CLICKS ON FILTER THEN RUN ANOTHER SEARCH
+	// & HIDE OTHER CONTAINERS
+	// & CHANGE THE FILTERS TO SHOW NEW FILTER
+	// RUN MASONRY ON CONTAINER
+
+	// zero out results if previous search has run
+
+
+	var changePlaceholders = function () {
+		var placeHolders = ["musician", "movie", "book", "author", "tv show"];
+		var colors = ['#C50404', '#0499C5', '#7704C5', '#10C504', '#EF970F'];
+		var artForm = $('.artForm');
+		var i = 0;
+		var j = 0;
+
+		setInterval( function () {
+			artForm.text(placeHolders[i++]);
+			artForm.css("color", colors[j++]);
+			if (i >= placeHolders.length) {
+				i = 0;
+				j= 0;
+			}
+		}, 1500);
+	};
+	changePlaceholders();
+	
+	var query;
+	var container;
+
+	var request = {
+		f: "gifted2903",
+		k: "nwfhotk2owzk",
+		format: "JSON",
+		verbose: 1
+	};
+	var myData = [];
 
 	// USER SUBMITS A QUERY
 	$('.recommendation-getter').submit( function(event){
-		// zero out results if previous search has run
 
-		// get the value of the tags the user submitted
-		var query = $(this).find("input[name='query']").val();
-		getRecommendations(query);
+		// get the value of the query the user submitted
+		query = $(this).find("input[name='query']").val();
+		getTasteKid(query, "");
+		$('#landing').hide();
+		$('#mainCon').removeClass('hidden');
+		$(this).find("input[name='query']").val('').focusout();
 	});
 
-	var music = "//music";
-	var books = "//books";
-	var authors = "//authors";
-	var movies = "//movies";
-	var shows = "//shows";
-
-	// GET RECOMMENDATIONS
+	/* GET RECOMMENDATIONS
 	var getRecommendations = function(query) {
-		container.removeData().empty();
+		//container.removeData().empty();
+		
+	};*/
 
-		// the parameters we need to pass in our request to TasteKid's API
-		var request = {
-			f: "gifted2903",
-			k: "nwfhotk2owzk",
-			format: "JSON",
-			verbose: 1
-		};
-
-		// GET MUSIC RECOMMENDATIONS
+	var getTasteKid = function (query, type) {
+		
 		$.ajax({
-			url: "http://www.tastekid.com/ask/ws?q="+query+music+"&jsonp=musicRecs",
+			url: "http://www.tastekid.com/ask/ws?q=" + query + type + "&jsonp=itemRecs",
 			data: request,
 			contentType: "application/json",
 			dataType: "jsonp",
 			type: "GET"
 		})	
-		.success(musicRecs = function (myData) {
+		.success(itemRecs = function (myData) {
+		
+		// CHANGE FILTER & CONTAINER DESTINATION DEPENDING ON RESULT OF QUERY
+			var changeFilter = function (category) {
+				$(".category:contains(" + category + ")").parent().addClass('selected');
+				$(".category:contains(" + category + ")").parent().addClass('loaded');
+				$(".category:contains(" + category + ")").parent().find($('.recCount')).text(myData.Similar.Results.length + " Alikes").show();
+			};
+			if(!$('.filter').hasClass('loaded')) {
+				if(myData.Similar.Info[0].Type == "music") {
+					changeFilter("Music");
+					var container = $("#masonry-con-music");
+				}
+				else if (myData.Similar.Info[0].Type == "movie") {
+					changeFilter("Movies");
+					var container = $("#masonry-con-movie");
+				}
+				else if (myData.Similar.Info[0].Type == "show") {
+					changeFilter("TV Shows");
+					var container = $("#masonry-con-show");
+				}
+				else {
+					changeFilter("Books");
+					var container = $("#masonry-con-book");
+				};
+			}
+			else {
+				if(myData.Similar.Results[0].Type == "music") {
+					changeFilter("Music");
+					var container = $("#masonry-con-music");
+				}
+				else if (myData.Similar.Results[0].Type == "movie") {
+					changeFilter("Movies");
+					var container = $("#masonry-con-movie");
+				}
+				else if (myData.Similar.Results[0].Type == "show") {
+					changeFilter("TV Shows");
+					var container = $("#masonry-con-show");
+				}
+				else {
+					changeFilter("Books");
+					var container = $("#masonry-con-book");
+				};
+			};
+				
 		// SHOW THE QUERY RESULTS FIRST
 			$.each(myData.Similar.Info, function(i, item) {
 				var showResult = showRec(item);
-				$('.results').prepend(showResult);
+				container.prepend(showResult);
 			});
+
+		// SHOW THE RECOMMENDED ITEMS
 			$.each(myData.Similar.Results, function(i, item) {
 				var resultItem = showRec(item);
-				$('.results').append(resultItem);	
+				container.append(resultItem);	
 			});
+			container.show();
+			container.masonry();
 			modals();
 		});
-			
-		// GET BOOK RECOMMENDATIONS
-		$.ajax({
-			url: "http://www.tastekid.com/ask/ws?q="+query+books+"&jsonp=bookRecs",
-			data: request,
-			contentType: "application/json",
-			dataType: "jsonp",
-			type: "GET"
-		})	
-		.success(bookRecs = function (myData) {
-			$.each(myData.Similar.Results, function(i, item) {
-				var resultItem = showRec(item);
-				$('.results').append(resultItem);
-			});
-		});
-
-		// GET MOVIE RECOMMENDATIONS
-		$.ajax({
-			url: "http://www.tastekid.com/ask/ws?q="+query+movies+"&jsonp=movieRecs",
-			data: request,
-			contentType: "application/json",
-			dataType: "jsonp",
-			type: "GET"
-		})	
-		.success(movieRecs = function (myData) {
-			$.each(myData.Similar.Results, function(i, item) {
-				var resultItem = showRec(item);
-				$('.results').append(resultItem);
-			});
-		});
-
-		// GET TV RECOMMENDATIONS
-		$.ajax({
-			url: "http://www.tastekid.com/ask/ws?q="+query+shows+"&jsonp=showRecs",
-			data: request,
-			contentType: "application/json",
-			dataType: "jsonp",
-			type: "GET"
-		})	
-		.success(showRecs = function (myData) {
-			$.each(myData.Similar.Results, function(i, item) {
-				var resultItem = showRec(item);
-				$('.results').append(resultItem);
-			});
-		});
 	};
+	
+	$('#filters').on('click', '.filter', function() {
+		var nameOfFilter = $(this).find($('.category')).text();
+		var categoryTag;
+		
+		// PASS NAME OF FILTER TO CATEGORY AND SEARCH NAMES
+		if (nameOfFilter == 'Music') {
+			container = $('#container-con-music');
+			searchTag = '//music';
+		}
+		else if (nameOfFilter == "Books") {
+			container = $('#container-con-book');
+			searchTag = '//books';
+
+		}
+		else if (nameOfFilter == "Movies") {
+			container = $('#container-con-movie');
+			searchTag = '//movies';
+		}
+		else {
+			container = $('#container-con-show');
+			searchTag = '//shows';
+		};
+
+		container.siblings().hide();
+
+		// IF THIS QUERY HAS BEEN LOADED HIDE OTHERS AND SHOW THIS
+		if ($(this).hasClass('loaded')) {
+			$('.results').hide();
+			container.show();
+			container.masonry();
+			console.log(container);
+		}
+		else {
+			$(this).addClass('loaded');
+			getTasteKid(query, searchTag);
+			$( document ).ajaxComplete(function() {
+				$('.results').hide();
+				container.show();
+			});
+			console.log(container);
+			container.masonry();
+		};
+		
+
+		$('.filter').removeClass('selected');
+		$('.filter').find('.recCount').hide();
+		$(this).addClass('selected');
+		$(this).find('.recCount').show;
+	});
+
 
 // SHOW RECOMMENDATIONS FUNCTION
 	var showRec = function(recommendation) {
@@ -103,7 +191,7 @@ $(document).ready( function() {
 		var result = $('.templates .recResult').clone();
 
 		// PLACE THE IMAGE
-		var recImg = result.find('.recImg');
+		/*var recImg = result.find('.recImg');
 
 		var placeImage = function () {
 			
@@ -128,13 +216,13 @@ $(document).ready( function() {
 					recImg.attr('src', imageURL);
 				
 					//Initiate your masonry
-					container.imagesLoaded(function(){ 
+					//container.imagesLoaded(function(){ 
 					    container.masonry({
 					        columnWidth: 60,
 					  		itemSelector: '.item',
 					  		gutter: 15
 					    }); 
-					});
+					//});
 				});
 			};
 			
@@ -155,7 +243,7 @@ $(document).ready( function() {
 			bingSearch(recommendation.Name);
 
 		}; 
-		placeImage();
+		placeImage(); */
 
 		// SET THE TITLE FOR THE BOOK
 		var recTitle = result.find('.recTitle');
@@ -165,6 +253,7 @@ $(document).ready( function() {
 		// SET THE TYPE OF THE BOOK
 		var recType = result.find('.recType');
 		recType.addClass(recommendation.Type);
+		result.addClass(recommendation.Type);
 
 		// SET THE DESCRIPTION OF THE BOOK
 		var recDescriptionText = result.find('.text');
@@ -228,11 +317,11 @@ $(document).ready( function() {
 			console.log("Video is removed!");
 		});
 
-		$('html').click(function() {
+		/*$('html').click(function() {
 			$('.gigante').find('.recDescription').fadeOut();
 			$('.gigante').removeClass('gigante');
 			container.masonry();
-		});
+		});*/
 	};
 
 	/*$( document ).ajaxStop(function() {
@@ -240,7 +329,7 @@ $(document).ready( function() {
 			var query = 
 			getRecommendations(query);
 		});
-	});*/
+	});
 
 	$(document).ajaxComplete(function() {
 		$('.recTitle').on('click', function() {
@@ -252,7 +341,36 @@ $(document).ready( function() {
 		$('#masonry-con').show();
 	});
 
+	//DUCK DUCK GO IMAGE SEARCH
+	var duckSearch = function (query) {
+		var duckURI = BuildDuckGoUri(query);
 
+		var duckDuckGo = $.ajax ({
+			url: duckURI,
+			type: 'GET',
+			crossDomain: true,
+    		dataType: 'jsonp'
+		})
+		.success( duckSearch = function(myData) {
+			console.log(myData);
+		});
+	};
+
+	function BuildDuckGoUri(query) {
+ 		//Build an uri for the DuckDuckGo API call.                                
+		var duckApiUrl = "http://api.duckduckgo.com/?q=";
+		// var bingApiImageCount = "1";                
+		 
+		var s = duckApiUrl + query //+ "%20" + recommendation.Type + "%27" +//
+		//"&image.count=" + bingApiImageCount +
+		//"&Image.Offset=" + 0 +
+		+ "&format=json" + "&t=alike";
+		 
+		return s;                
+	};  
+
+	duckSearch("u2");
+	*/
 });
 
 

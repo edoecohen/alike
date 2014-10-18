@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Masonry - Test</title>
+	<title>Alike</title>
+	<link rel="icon" href="images/favicon.png" />
 	<link rel="stylesheet" href="css/main.css" />
 	<link href='http://fonts.googleapis.com/css?family=Vollkorn|Permanent+Marker|Montserrat:400,700' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="css/jquery.modal.css" type="text/css" media="screen" />
@@ -11,34 +12,66 @@
 	<script src="js/classie.js"></script>
 	<script src="js/imagesloaded.pkgd.min.js"></script>
 	<script src="js/jquery.modal.min.js" type="text/javascript" charset="utf-8"></script>
-	<script src="js/app.js"></script>
+	<script src="js/appnew.js"></script>
 
 </head>
 
 <body>
-	<div id="mainCon">
+
+	<div id="landing">
+        <div class="row">
+            <div class="logo">
+				Alike
+			</div>
+			<form class="recommendation-getter" onsubmit="return false;">
+				<div class="placeholder">What <span class="artForm">musician</span> do you like?</div>
+				<div class="inputField">
+					<input type="text" name="query" size="30" autofocus required>
+				</div>
+				<input type="submit" value="Submit &#42;">
+				<p>* Discover new music, books, movies, and tv shows based on what you already like. Recommendations are powered by <a href="http://www.tastekid.com/" target="_blank">TasteKid</a>.</p>
+			</form>
+		</div>
+	</div>
+
+	<div id="mainCon" class="hidden">
 		<div id="leftCol">
 			<div class="logo">
 				Alike
 			</div>
 			<form class="recommendation-getter" onsubmit="return false;">
 				<div class="inputField">
-					<input type="text" name="query" size="30" placeholder="What's alike...?" autofocus required>
+					<input type="text" name="query" size="30" placeholder="What else do you like...?" autofocus required>
 				</div>
 				<input type="submit" value="Submit">
 			</form>
-			<nav class="filters">
+			<nav id="filters" class="hidden">
 				<ul>
-					<li class="selected">All <span class="recCount">19 Alikes</span></li>
-					<li class="filterMusic">Music</li>
-					<li class="filterBooks">Books</li>
-					<li class="filterMovies">Movies</li>
-					<li class="filterShows">TV Shows</li>
+					<li class="filter musicFilter">
+						<span class="category">Music</span>
+						<span class="recCount"></span>
+					</li>
+					<li class="filter booksFilter">
+						<span class="category">Books</span>
+						<span class="recCount"></span>
+					</li>
+					<li class="filter moviesFilter">
+						<span class="category">Movies</span>
+						<span class="recCount"></span>
+					</li>
+					<li class="filter showsFilter">
+						<span class="category">TV Shows</span>
+						<span class="recCount"></span>
+					</li>
 				</ul>
 			</nav>
 		</div>
 
 	<!-- RECOMMENDATIONS -->
+		<div id="masonry-con-music" class="results"></div>
+		<div id="masonry-con-movie" class="results"></div>
+		<div id="masonry-con-book" class="results"></div>
+		<div id="masonry-con-show" class="results"></div>
 		<div id="masonry-con" class="results"></div>
 		<div class="templates hidden">
 			<div class="recResult item">
@@ -51,7 +84,7 @@
 							<li>Buy</li>
 						</ul>
 					</div>
-					<img src="" />
+					<img src="images/Salinger.jpg" />
 				</div>
 
 				<div class="recTitle"></div>

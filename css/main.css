@@ -30,6 +30,46 @@ html, body {
 	min-height: 800px;
 }
 
+/* LANDING PAGE */
+
+#landing .row {
+	margin-top: 150px;
+}
+#landing .logo {
+	font-size: 5em;
+}
+
+#landing .recommendation-getter {
+	width: 30%;
+	height: 100%;
+}
+
+.placeholder {
+	color: #808080;
+	display: block;
+	margin-bottom: 30px;
+	font-size: 1.4em;
+	text-align: center;
+}
+.artForm {
+	color: #C50404;
+}
+
+#landing p {
+	color: #b0b0b0;
+	font-family: 'Vollkorn', serif;
+	font-size: 0.8em;
+	font-style: italic;
+	margin-top: 100px;
+}
+#landing p a {
+	color: #949494;
+	text-decoration: none;
+}
+#landing p a:hover {
+	color: #1070BB;
+}
+
 /* LEFT COLUMN */
 #leftCol {
     float: left;
@@ -65,11 +105,7 @@ html, body {
 .inputField {
 	position: relative;
 }
-.placeholder {
-	color: #808080;
-	display: block;
-	top: 2px;
-}
+
 .recommendation-getter input[type="submit"] {
 	background: white;
 	border-radius: 0;
@@ -87,39 +123,38 @@ html, body {
 	color: black;
 }
 
-.filters {
+#filters {
 	margin-top: 50px;
 	width: 70%;
 	margin: 50px auto;
 }
 
-.filters ul {
+#filters ul {
 	list-style: none;
 	padding: 0;
 }
 
-.filters ul li {
+#filters ul li {
 	margin: 10px 0;
 	color: #AFAFAF;
 	cursor: pointer;
 }
-.filters ul li:hover {
+#filters ul li:hover {
 	color: grey;
 }
 
-.filters ul li.selected {
+#filters ul li.selected {
 	color: black;
 	cursor: default;
 }
 
-.filters ul li.selected:hover {
+#filters ul li.selected:hover {
 	color: black;
 }
 
 .recCount {
 	float: right;
 }
-
 
 /* MASONRY */
 
@@ -132,12 +167,11 @@ html, body {
 	padding: 0px 10px 5px;
 }
 
-#masonry-con {
+#masonry-con, #masonry-con-music, #masonry-con-movie, #masonry-con-book, #masonry-con-show {
 	max-width: 1207px;
 	left: 345px;
 	width: 75%;
 	margin-top: 18px;
-	display: none;
 }
 
 .item { 
@@ -222,11 +256,18 @@ html, body {
 /* RESPONSIVE */
 
 @media (max-width: 550px) {
+	#landing .recommendation-getter {
+		width: 70%;
+	}
+	.placeholder {
+		font-size: 1.2em;
+	}
+
 	#leftCol {
 		width: 100%;
 		float: none;
 	}
-	#masonry-con {
+	#masonry-con, #masonry-con-music, #masonry-con-movie, #masonry-con-book, #masonry-con-show {
 		width: 100%;
 		left: 15%;
 	}
