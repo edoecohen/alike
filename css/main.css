@@ -239,11 +239,19 @@ html, body {
 .links li {
 	display: inline;
 	margin-right: 20px;
+}
+
+.links li:hover, .alike:hover {
+	color: red;
 	cursor: pointer;
 }
 
-.links li:hover {
-	color: red;
+.alike {
+	font-family: 'Permanent Marker', cursive;
+	font-size: 1.2em;
+	float: left;
+	margin-top: 35px;
+	margin-left: 15px;
 }
 
 .recVideo {
@@ -252,6 +260,17 @@ html, body {
 .recVideoHolder {
 	display: none;
 }
+
+.item.gigante {
+  width: 530px;
+}
+.item.gigante:hover {
+	cursor: default;
+}
+.item:hover {
+	cursor: pointer;
+}
+
 
 /* RESPONSIVE */
 
@@ -275,17 +294,9 @@ html, body {
 		min-width: 70%;
 	}
 	.item.gigante{
-		width: 355px;
+		width: 370px;
+		margin-left: -30px;
 	}
 }
 
-.item.gigante {
-  width: 570px;
-}
-.item.gigante:hover {
-	cursor: default;
-}
-.item:hover {
-	cursor: pointer;
-}
 

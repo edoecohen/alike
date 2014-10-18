@@ -1,16 +1,9 @@
 $(document).ready( function() {
 
 /*
-- if user runs a new search, then it should work fine
-- for each item result, clone template and enter into container
-- For search query item, apply highlight
-- get image for each item
-- run Masonry on container (after every item?)
-- if user clicks on title or image then description should show
-& image should increase
-- add Youtube links
 - add Amazon links
-
+- Close option to close description (?)
+- get image for each item
 */
 
 // LANDING PAGE WITH ROTATING TEXT
@@ -41,16 +34,11 @@ $(document).ready( function() {
 		gutter: 10,
 		itemSelector: '.item'
 	});
-
+	var items = $('.item');
 
 	var myData = [];
 
 	$('.recommendation-getter').submit( function(event){
-		if(container.html().length > 0) {
-			var items = $('.item');
-			container.masonry('remove', items);
-			container.masonry();
-		};
 		
 		query = $(this).find("input[name='query']").val();
 		getTasteKid(query);
@@ -68,6 +56,12 @@ $(document).ready( function() {
 	};
 
 	var getTasteKid = function (query) {
+		if(container.html().length > 0) {
+			var items = $('.item');
+			container.masonry('remove', items);
+			//container.masonry();
+		};
+
 		$.ajax({
 			url: "http://www.tastekid.com/ask/ws?q=" + query + "&jsonp=itemRecs",
 			data: request,
@@ -80,19 +74,23 @@ $(document).ready( function() {
 		// SHOW THE QUERY RESULTS FIRST
 			$.each(myData.Similar.Info, function(i, item) {
 				var showResult = showRec(item);
-				
 				container.append(showResult).masonry( 'appended', showResult, true );
 			});
 
 		// SHOW THE RECOMMENDED ITEMS
 			$.each(myData.Similar.Results, function(i, item) {
 				var resultItem = showRec(item);
-				
 				container.append(resultItem).masonry( 'appended', resultItem, true );
 			});
+			
+			container.imagesLoaded(function(){ 
+				container.masonry({
+					gutter: 12,
+					itemSelector: '.item'
+				});
+			});
 
-			container.masonry();
-			//modals();
+			modals();
 		});
 	};
 
@@ -119,20 +117,84 @@ $(document).ready( function() {
 		recVideoHolder.html('<iframe width="480" height="360" src="' + videoURL + '?rel=0" frameborder="0" allowfullscreen></iframe>');
 
 		var videoType = result.find('.video');
-		var setVideoType = function () {
-			if (recommendation.Type == 'movie' || 'show') {
+		
+		var changeVideoType = function () {
+			if(recommendation.Type == 'music') {
+				videoType.text("Music Video");
+			}
+			else if(recommendation.Type == 'movie') {
 				videoType.text("Trailer");
 			}
-			else if (recommendation.Type == 'music') {
-				videoType.text("Music Video");
+			else if(recommendation.Type == 'show') {
+				videoType.text("Trailer");
 			}
 			else {
 				videoType.text("");
-			}
+			};
 		};
-		setVideoType();
+		changeVideoType();
 
 		return result;
 	};
-	
+
+// ITEM OPENS TO SHOW DESCRIPTION
+	var modals = function() {
+
+		// USER CLICKS ALIKE BUTTON
+		$('.alike').bind('click', function() {
+			newSearch = $(this).parent().parent().parent().find('.recTitle').text();
+			getTasteKid(newSearch);
+			window.scrollTo(0, 0);
+		});
+
+		// OPEN & CLOSE DESCRIPTION WHEN IMG OR TITLE ARE CLICKED
+		$('.recImg').bind('click', function(event) {
+			if($(this).parent().hasClass('gigante')) {
+				return;
+			}
+			else {
+				event.stopPropagation();
+				$('.gigante').find('.recDescription').fadeOut();
+				$('.gigante').removeClass('gigante');
+				$(this).parent().addClass('gigante');
+				$(this).find('.recDescription').fadeIn();
+				container.masonry();
+			};
+		});
+
+		$('.recTitle').bind('click', function(event) {
+			if($(this).parent().hasClass('gigante')) {
+				$(this).parent().find('.recDescription').fadeOut();
+				$(this).parent().removeClass('gigante');
+				container.masonry();
+			}
+			else {
+				event.stopPropagation();
+				$('.gigante').find('.recDescription').fadeOut();
+				$('.gigante').removeClass('gigante');
+				$(this).parent().addClass('gigante');
+				$(this).siblings('.recImg').find('.recDescription').fadeIn();
+				container.masonry();
+			};
+		});
+
+		// SHOW VIDEO POPUP
+		$('.video').on('click', function(event) {
+			event.stopPropagation();
+	  		$(this).parent().parent().parent().parent().find('.recVideo').modal({
+	  			fadeDuration: 250,
+	  			showClose: true,
+	  		});
+	  		return false;
+		});
+
+		$('.recVideo').on('modal:open', function () { 
+			var videoHTML =  $(this).parent().find('.recVideoHolder').html();
+			$(this).html(videoHTML);
+		});
+
+		$('.recVideo').on('modal:close', function () {
+			$(this).html('');
+		});
+	};
 });
