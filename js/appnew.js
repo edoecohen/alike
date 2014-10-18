@@ -99,6 +99,63 @@ $(document).ready( function() {
 
 		// CLONE RESULT TEMPLATE CODE
 		var result = $('.templates .recResult').clone();
+
+		// PLACE THE IMAGE
+		var recImg = result.find('.recImg');
+
+		var placeImage = function () {
+			
+			var imageURL;
+
+			// SEARCH FOR THE QUERY IMAGE VIA BING
+			function bingSearch(query) {            
+			//Build a new API uri.
+				var bingApiAppId = ":2KE1qCnJ8FJaHjFPqBcPNPB4gxK+S3QxGStHkBTK/pQ";
+
+				var encodedAppKey = btoa(bingApiAppId);
+				var bingUri = BuildBingApiUri(query);
+
+		  		//Make the API call.        
+				var bingResult = $.ajax({
+				url: bingUri,
+				type: 'GET',
+				headers: {	"Authorization": "Basic " + encodedAppKey}
+				})
+				.success( bingResult = function (myData){
+					imageURL = myData.d.results[0].MediaUrl;
+					var recImg = result.find('.recImg img');
+					recImg.attr('src', imageURL);
+				
+					//Initiate your masonry
+					container.imagesLoaded(function(){ 
+					    container.masonry({
+					        //columnWidth: 60,
+					  		itemSelector: '.item',
+					  		gutter: 12
+					    }); 
+					});
+				});
+			};
+			
+			function BuildBingApiUri(query) {
+		 		//Build an uri for the Bing API call.                                
+				var bingApiUrl = "https://api.datamarket.azure.com/Bing/Search/v1/Image";
+				// var bingApiImageCount = "1";                
+				 
+				var s = bingApiUrl +
+				"?Query=%27" + query + "%20" + recommendation.Type + "%27" +
+				//"&image.count=" + bingApiImageCount +
+				//"&Image.Offset=" + 0 +
+				"&$format=json";
+				 
+				return s;                
+			};    
+
+			bingSearch(recommendation.Name);
+
+		}; 
+		placeImage();
+
 		
 		// SET THE TITLE FOR THE ITEM
 		var recTitle = result.find('.recTitle');
@@ -112,6 +169,7 @@ $(document).ready( function() {
 		var recDescriptionText = result.find('.text');
 		recDescriptionText.text(recommendation.wTeaser);
 
+		// SET THE VIDEO URL & FUNCTIONALITY
 		var videoURL = recommendation.yUrl;
 		var recVideoHolder = result.find('.recVideoHolder');
 		recVideoHolder.html('<iframe width="480" height="360" src="' + videoURL + '?rel=0" frameborder="0" allowfullscreen></iframe>');
@@ -133,6 +191,10 @@ $(document).ready( function() {
 			};
 		};
 		changeVideoType();
+
+		var recBuyLink = result.find('.buyRec');
+		var buyThisLink = "http://www.amazon.com/s?url=search-alias%3Daps&field-keywords=" + recommendation.Name;
+		recBuyLink.attr("href", buyThisLink);
 
 		return result;
 	};

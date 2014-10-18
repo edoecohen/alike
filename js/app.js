@@ -191,7 +191,7 @@ $(document).ready( function() {
 		var result = $('.templates .recResult').clone();
 
 		// PLACE THE IMAGE
-		/*var recImg = result.find('.recImg');
+		var recImg = result.find('.recImg');
 
 		var placeImage = function () {
 			
@@ -243,7 +243,7 @@ $(document).ready( function() {
 			bingSearch(recommendation.Name);
 
 		}; 
-		placeImage(); */
+		placeImage();
 
 		// SET THE TITLE FOR THE BOOK
 		var recTitle = result.find('.recTitle');

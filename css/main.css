@@ -33,10 +33,10 @@ html, body {
 /* LANDING PAGE */
 
 #landing .row {
-	margin-top: 150px;
+	margin-top: 130px;
 }
 #landing .logo {
-	font-size: 5em;
+	font-size: 6em;
 }
 
 #landing .recommendation-getter {
@@ -58,7 +58,7 @@ html, body {
 #landing p {
 	color: #b0b0b0;
 	font-family: 'Vollkorn', serif;
-	font-size: 0.8em;
+	font-size: 0.9em;
 	font-style: italic;
 	margin-top: 100px;
 }
@@ -75,6 +75,7 @@ html, body {
     float: left;
     width: 330px;
     min-height: 100%;
+    position: fixed;
 }
 
 .logo {
@@ -220,10 +221,11 @@ html, body {
 	background: rgba(43, 42, 42, 0.7);
 	color: white;
 	font-family: 'Vollkorn', serif;
-	padding: 15px;
+	padding: 5%;
 	position: absolute;
 	height: 100%;
 	overflow: hidden;
+	width: 90%;
 }
 
 .links {
@@ -241,9 +243,14 @@ html, body {
 	margin-right: 20px;
 }
 
-.links li:hover, .alike:hover {
+.links li:hover, .alike:hover, .buyRec:hover {
 	color: red;
 	cursor: pointer;
+}
+
+.buyRec {
+	text-decoration: none;
+	color: white;
 }
 
 .alike {
@@ -262,7 +269,7 @@ html, body {
 }
 
 .item.gigante {
-  width: 530px;
+  width: 580px;
 }
 .item.gigante:hover {
 	cursor: default;
@@ -285,6 +292,7 @@ html, body {
 	#leftCol {
 		width: 100%;
 		float: none;
+		position: relative;
 	}
 	#masonry-con, #masonry-con-music, #masonry-con-movie, #masonry-con-book, #masonry-con-show {
 		width: 100%;
