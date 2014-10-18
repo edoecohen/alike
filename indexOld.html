@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Alike</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="css/main.css" />
+	<!-- link rel="icon" href="images/favicon.jpg" / -->
+	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<script src="js/app.js"></script>
+	
+</head>
+
+<body>
+
+	<div class="container intro">
+	    <div class="row vertical-center-row">
+	        <div class="col-lg-12">
+	            <div class="row ">
+	                <div class="col-md-6 col-md-offset-3 intro-main">
+	                	<h3>Find Recommendations for Books & Authors</h3>
+						<p>Tell us a book or author you like and we'll recommend others...</p>
+						<form class="recommendation-getter" onsubmit="return false;">
+							<input type="text" placeholder='e.g., "J.D. Salinger" or "Harry Potter"' name="query" size="30" autofocus required>
+							<input type="submit" value="Submit">
+						</form>
+	                </div>
+	            </div>
+	            <!--div class="results-container"-->
+					<div class="results"></div>
+				<!-- /div -->
+				<div class="templates hidden">
+					<ul class="recResult">
+						<li class="recImage">
+							<img src="" / style="width:100px">
+						</li>
+						<li class="recTitle">
+							<a href="" target="_blank"></a>
+						</li>
+						<li class="recType">
+						</li>
+						<li class="recDescription" style="display:block; color: black; background: white; position: relative;">
+						</li>
+						<li class="recActions">
+							<div class="alikeButton">
+								Alike
+							</div>
+						</li>
+					</ul>
+				</div>
+	        </div>
+	    </div>
+	</div>
+
+
+</body>
+</html>
